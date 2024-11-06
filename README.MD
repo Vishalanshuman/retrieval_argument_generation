@@ -30,8 +30,8 @@ This is a FastAPI project that provides two main features:
 
 1. Clone the repository:
    ```bash
-   git clone <repo_url>
-   cd <repo_name>
+   git clone https://github.com/Vishalanshuman/retrieval_argument_generation.git
+   cd retrieval_argument_generation
    ```
 
 2. Create a virtual environment (optional but recommended):
