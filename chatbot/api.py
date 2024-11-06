@@ -66,11 +66,18 @@ def get_answer(question:schemas.Question,db:Session=Depends(get_db),current_user
         if 'Helpful Answer:' in answer['result']:
             answer_text = answer['result'].split('Helpful Answer:')[1].strip()
         else:
-            answer_text = answer['result']  #
+            answer_text = answer['result']  
 
         chat_history.upsert_message(chat_id, question.question, embeddings)
         chat_history.upsert_message(chat_id, answer_text, embeddings)
+        take_reocrd = models.Chat(
+            question=question.question,
+            user_id=current_user.id,
 
+        )
+        db.add(take_reocrd)
+        db.commit()
+        db.refresh(take_reocrd)
         return {
             "question":question.question,
             "answer":answer_text 
