@@ -49,7 +49,8 @@ def upload_pdf(file: UploadFile = File(...),db:Session=Depends(get_db),current_u
 @router.post('/ask',response_model=schemas.Answer)
 def get_answer(question:schemas.Question,db:Session=Depends(get_db),current_user:models.User=Depends(get_current_user)):
     try:
-        chat_id = f'user_{current_user}'
+        chat_id = f'user_{current_user.id}'
+        # print("chat_id:",chat_id)
         previous_history = chat_history.retrieve_chat_history(chat_id)  
 
         if previous_history:
@@ -57,12 +58,12 @@ def get_answer(question:schemas.Question,db:Session=Depends(get_db),current_user
             full_question = f"{conversation_context}\n{question.question}"
         else:
             full_question = question.question
-        relevant_documents = vectorstore.similarity_search(question.question, k=3)  
+        # relevant_documents = vectorstore.similarity_search(question.question, k=3)  
         # embeddings.index_documents(relevant_documents)
         # # Combine relevant documents with the question for the QA model
-        combined_input = f"{full_question}\n\nRelevant Documents:\n" + "\n".join([doc.page_content for doc in relevant_documents])
+        # combined_input = f"{full_question}\n\nRelevant Documents:\n" + "\n".join([doc.page_content for doc in relevant_documents])
         answer_text=""
-        answer = qa_chain.ask_question(combined_input)
+        answer = qa_chain.ask_question(full_question)
         if 'Helpful Answer:' in answer['result']:
             answer_text = answer['result'].split('Helpful Answer:')[1].strip()
         else:
