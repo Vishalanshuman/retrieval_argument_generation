@@ -17,9 +17,7 @@ def get_qa_chain():
     try:
         logger.info("Starting RAG application pipeline.")
         setting = Settings()
-
-        chat_history = ChatHistory()
-        chat_id = "unique_chat_id"  # Unique chat session identifier
+        
         embedding_model = setting.embedding_model
         qa_model = setting.model_name
 
